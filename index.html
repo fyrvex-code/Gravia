@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gravia — Auto Clicker</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#090b11;
+    color:white;
+    overflow-x:hidden;
+}
+
+a{
+    text-decoration:none;
+}
+
+/* BACKGROUND */
+
+.bg{
+    position:fixed;
+    inset:0;
+    z-index:-3;
+    background:
+    radial-gradient(circle at top left,#6d3eff33,transparent 30%),
+    radial-gradient(circle at bottom right,#00a2ff22,transparent 30%),
+    #090b11;
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size:60px 60px;
+    z-index:-2;
+    mask-image:linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+}
+
+.blur1,
+.blur2{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(120px);
+    z-index:-1;
+    animation:float 10s ease-in-out infinite;
+}
+
+.blur1{
+    width:350px;
+    height:350px;
+    background:#6d3eff66;
+    top:-100px;
+    left:-100px;
+}
+
+.blur2{
+    width:320px;
+    height:320px;
+    background:#0099ff44;
+    right:-100px;
+    bottom:-100px;
+    animation-delay:3s;
+}
+
+@keyframes float{
+    0%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(25px);
+    }
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* HEADER */
+
+header{
+    width:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:100;
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.nav{
+    max-width:1400px;
+    margin:auto;
+    padding:22px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    font-size:36px;
+    font-weight:900;
+    background:linear-gradient(90deg,#8f5dff,#3da7ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.links{
+    display:flex;
+    gap:35px;
+}
+
+.links a{
+    color:#b8bfd3;
+    font-size:15px;
+    transition:0.3s;
+    position:relative;
+}
+
+.links a::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-6px;
+    width:0%;
+    height:2px;
+    background:#8f5dff;
+    transition:0.3s;
+}
+
+.links a:hover::after{
+    width:100%;
+}
+
+.links a:hover{
+    color:white;
+}
+
+.download-btn{
+    padding:14px 24px;
+    border-radius:16px;
+    border:none;
+    background:linear-gradient(90deg,#8f5dff,#6d3eff);
+    color:white;
+    cursor:pointer;
+    font-weight:700;
+    transition:0.35s;
+    box-shadow:0 0 30px #6d3eff55;
+}
+
+.download-btn:hover{
+    transform:translateY(-4px) scale(1.03);
+    box-shadow:0 0 50px #6d3eff88;
+}
+
+/* HERO */
+
+.hero{
+    max-width:1400px;
+    margin:auto;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:180px 40px 120px;
+}
+
+.hero-content{
+    max-width:950px;
+    animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(50px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 22px;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:999px;
+    background:rgba(255,255,255,0.03);
+    margin-bottom:35px;
+    color:#cfd5e6;
+    font-size:14px;
+    backdrop-filter:blur(12px);
+}
+
+.hero h1{
+    font-size:92px;
+    line-height:0.95;
+    margin-bottom:35px;
+    font-weight:900;
+}
+
+.gradient{
+    background:linear-gradient(90deg,#8f5dff,#3da7ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+    font-size:20px;
+    line-height:2;
+    color:#aeb7cb;
+    margin-bottom:30px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:45px;
+}
+
+.primary-btn{
+    padding:18px 36px;
+    border:none;
+    border-radius:20px;
+    background:linear-gradient(90deg,#8f5dff,#6d3eff);
+    color:white;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.35s;
+    box-shadow:0 0 40px #6d3eff66;
+}
+
+.primary-btn:hover{
+    transform:translateY(-5px) scale(1.04);
+}
+
+.secondary-btn{
+    padding:18px 36px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:#111522;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+    transition:0.35s;
+}
+
+.secondary-btn:hover{
+    background:#171c2b;
+    transform:translateY(-4px);
+}
+
+/* SECTION */
+
+.section{
+    max-width:1400px;
+    margin:auto;
+    padding:120px 40px;
+}
+
+.section-header{
+    margin-bottom:70px;
+}
+
+.section-header h2{
+    font-size:64px;
+    margin-bottom:20px;
+    font-weight:900;
+}
+
+.section-header p{
+    color:#9ca7bf;
+    font-size:19px;
+    line-height:2;
+    max-width:900px;
+}
+
+/* FEATURES */
+
+.features-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:28px;
+}
+
+.feature-card{
+    background:linear-gradient(180deg,#121827,#0d111b);
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:34px;
+    padding:42px;
+    transition:0.4s;
+    position:relative;
+    overflow:hidden;
+}
+
+.feature-card::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg,transparent,#6d3eff11);
+    opacity:0;
+    transition:0.4s;
+}
+
+.feature-card:hover::before{
+    opacity:1;
+}
+
+.feature-card:hover{
+    transform:translateY(-10px);
+    border-color:#6d3eff;
+    box-shadow:0 0 50px #6d3eff22;
+}
+
+.feature-icon{
+    font-size:48px;
+    margin-bottom:24px;
+}
+
+.feature-card h3{
+    font-size:24px;
+    margin-bottom:18px;
+    word-break:break-word;
+}
+
+.feature-card p{
+    color:#a7b0c4;
+    line-height:2;
+    font-size:16px;
+}
+
+/* INFO */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+    gap:30px;
+}
+
+.info-box{
+    background:#111522;
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:34px;
+    padding:45px;
+    transition:0.35s;
+}
+
+.info-box:hover{
+    transform:translateY(-8px);
+    border-color:#6d3eff;
+}
+
+.info-box h3{
+    font-size:34px;
+    margin-bottom:25px;
+}
+
+.info-box p{
+    color:#aab3c6;
+    line-height:2;
+    font-size:17px;
+}
+
+/* DOWNLOAD */
+
+.download-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:28px;
+}
+
+.download-card{
+    background:#111522;
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:34px;
+    padding:40px;
+    transition:0.35s;
+    position:relative;
+    overflow:hidden;
+}
+
+.download-card:hover{
+    transform:translateY(-8px);
+    border-color:#6d3eff;
+}
+
+.download-card h3{
+    font-size:34px;
+    margin-bottom:18px;
+}
+
+.download-card p{
+    color:#a7b0c4;
+    line-height:2;
+    margin-bottom:30px;
+}
+
+.download-real{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(90deg,#8f5dff,#6d3eff);
+    color:white;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.35s;
+}
+
+.download-real:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 40px #6d3eff55;
+}
+
+.download-disabled{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:18px;
+    background:#3b3f4c;
+    color:#c9c9c9;
+    font-size:16px;
+    font-weight:700;
+    cursor:not-allowed;
+}
+
+/* FOOTER */
+
+footer{
+    border-top:1px solid rgba(255,255,255,0.05);
+    padding:55px;
+    text-align:center;
+    color:#7f8aa3;
+    margin-top:80px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .hero h1{
+        font-size:58px;
+    }
+
+    .section-header h2{
+        font-size:42px;
+    }
+
+    .links{
+        display:none;
+    }
+
+    .hero{
+        padding-top:150px;
+    }
+
+    .feature-card h3{
+        font-size:22px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="grid"></div>
+<div class="blur1"></div>
+<div class="blur2"></div>
+
+<header>
+
+    <div class="nav">
+
+        <div class="logo">
+            Gravia
+        </div>
+
+        <div class="links">
+            <a href="#features">Функции</a>
+            <a href="#about">Описание</a>
+            <a href="#downloads">Скачать</a>
+        </div>
+
+        <a href="#downloads">
+            <button class="download-btn">
+                Скачать
+            </button>
+        </a>
+
+    </div>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            ⚡ Next Generation Auto Clicker
+        </div>
+
+        <h1>
+            Gravia —
+            <span class="gradient">
+                мощный
+            </span>
+            Auto Clicker
+        </h1>
+
+        <p>
+            Gravia — современный автокликер нового поколения,
+            созданный для высокой скорости,
+            плавной автоматизации и стабильной работы.
+            Приложение сочетает минималистичный интерфейс,
+            красивый современный дизайн
+            и высокую производительность.
+        </p>
+
+        <p>
+            Используйте настройку CPS,
+            удержание клавиш,
+            hotkeys и автоматические действия
+            без перегруженного интерфейса
+            и сложных настроек.
+            Gravia оптимизирован для быстрой работы
+            и низкого использования ресурсов системы.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#downloads">
+                <button class="primary-btn">
+                    Скачать сейчас
+                </button>
+            </a>
+
+            <a href="#features">
+                <button class="secondary-btn">
+                    Возможности
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section" id="features">
+
+    <div class="section-header">
+
+        <h2>
+            Возможности
+        </h2>
+
+        <p>
+            Gravia предоставляет быстрые инструменты автоматизации,
+            современный интерфейс
+            и плавную работу
+            для комфортного использования.
+        </p>
+
+    </div>
+
+    <div class="features-grid">
+
+        <div class="feature-card">
+
+            <div class="feature-icon">⚡</div>
+
+            <h3>Высокая скорость</h3>
+
+            <p>
+                Стабильная работа при высоком CPS
+                и минимальные задержки
+                во время автоматических кликов.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <div class="feature-icon">🎯</div>
+
+            <h3>Точная настройка</h3>
+
+            <p>
+                Настройка интервалов,
+                циклов и удержаний клавиш
+                для полного контроля.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <div class="feature-icon">⌨️</div>
+
+            <h3>Горячие клавиши</h3>
+
+            <p>
+                Быстрое включение и выключение
+                приложения через hotkeys
+                без переключения окон.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <div class="feature-icon">🚀</div>
+
+            <h3>Максимальная производительность</h3>
+
+            <p>
+                Низкая нагрузка на процессор
+                и стабильная работа
+                даже на слабых устройствах.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section" id="about">
+
+    <div class="section-header">
+
+        <h2>
+            Почему Gravia
+        </h2>
+
+        <p>
+            Gravia создаётся как современное решение
+            для автоматизации действий
+            с упором на скорость,
+            стабильность и красивый интерфейс.
+        </p>
+
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info-box">
+
+            <h3>
+                Современный интерфейс
+            </h3>
+
+            <p>
+                Интерфейс Gravia выполнен
+                в минималистичном тёмном стиле
+                с плавными анимациями,
+                эффектами свечения
+                и современными элементами дизайна.
+                Приложение выглядит аккуратно,
+                быстро работает
+                и не перегружает пользователя.
+            </p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h3>
+                Максимальная стабильность
+            </h3>
+
+            <p>
+                Приложение оптимизировано
+                для длительной работы без лагов,
+                вылетов и перегрузки системы.
+                Gravia использует минимальное количество ресурсов
+                и обеспечивает плавную работу
+                даже при высокой скорости кликов.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section" id="downloads">
+
+    <div class="section-header">
+
+        <h2>
+            Скачать Gravia
+        </h2>
+
+        <p>
+            Выберите платформу
+            для загрузки приложения.
+        </p>
+
+    </div>
+
+    <div class="download-grid">
+
+        <div class="download-card">
+
+            <h3>🪟 Windows</h3>
+
+            <p>
+                Полная версия Gravia
+                для Windows 10 и Windows 11.
+            </p>
+
+            <button class="download-real">
+                Скачать для Windows
+            </button>
+
+        </div>
+
+        <div class="download-card">
+
+            <h3>🐧 Linux</h3>
+
+            <p>
+                Стабильная версия приложения
+                для Linux систем.
+            </p>
+
+            <button class="download-real">
+                Скачать для Linux
+            </button>
+
+        </div>
+
+        <div class="download-card">
+
+            <h3>📱 Android</h3>
+
+            <p>
+                Android версия приложения
+                сейчас находится в разработке.
+            </p>
+
+            <button class="download-disabled">
+                В разработке
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    © 2026 Gravia — Next Generation Auto Clicker
+</footer>
+
+</body>
+</html>
